@@ -18,13 +18,13 @@
 </template>
 
 <script lang="ts">
-import { DomNode } from "@/interfaces/dom";
+import { TemplateNode } from "@/lib/template";
 import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "DomNode",
   props: {
-    node: { required: true, type: [Object as () => DomNode, String] }
+    node: { required: true, type: [Object as () => TemplateNode, String] }
   },
   emits: ["selected"]
 });
