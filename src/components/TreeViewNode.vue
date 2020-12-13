@@ -55,11 +55,9 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .hovered {
-  // outline: 2px yellow dashed;
-  background: transparentize($color: yellow, $amount: 0.8);
+  background: transparentize($color: yellow, $amount: 0.95);
 }
 .selected {
-  // outline: 2px red solid;
   background: transparentize($color: red, $amount: 0.8);
 }
 </style>

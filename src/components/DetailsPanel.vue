@@ -5,7 +5,12 @@
       selected && (selected.tag || "Node with no tag")
     }}</pre>
 
-    <div v-if="selected !== null" class="mt-3">
+    <div v-if="typeof selected === 'string'">
+      <span class="text-gray-400">Parent:</span>
+      <!-- Show the parent node using TreeViewNode to support hover and select -->
+    </div>
+
+    <div v-else-if="selected !== null" class="mt-3">
       <span class="text-gray-400">Classes:</span>
       <input
         type="text"

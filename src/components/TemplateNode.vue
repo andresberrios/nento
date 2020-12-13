@@ -1,7 +1,14 @@
 <template>
-  {{ typeof node === "string" ? node : undefined
-  }}<component
-    v-if="typeof node !== 'string'"
+  <span
+    v-if="typeof node === 'string'"
+    :class="classes"
+    @click.self="editor.selectNode(node)"
+    @mouseover.self="editor.hoverNode(node)"
+    @mouseout.self="editor.hoverNode(null)"
+    >{{ node }}</span
+  >
+  <component
+    v-else
     :is="node.tag"
     v-bind="node.attrs"
     :class="classes"
@@ -32,15 +39,18 @@ export default defineComponent({
     return {
       editor,
       classes: computed(() => {
-        if (typeof props.node === "string" || "bindingId" in props.node) {
-          return undefined;
-        }
         const result: { [c: string]: boolean } = {};
-        for (const c of props.node.classes ?? []) {
-          if (typeof c !== "string") {
-            throw new Error("Not yet implemented!");
+        if (
+          typeof props.node !== "string" &&
+          "classes" in props.node &&
+          Array.isArray(props.node.classes)
+        ) {
+          for (const c of props.node.classes) {
+            if (typeof c !== "string") {
+              throw new Error("Not yet implemented!");
+            }
+            result[c] = true;
           }
-          result[c] = true;
         }
         result.selected = props.node === editor.state.selected;
         result.hovered = props.node === editor.state.hovered;
