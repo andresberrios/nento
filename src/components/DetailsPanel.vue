@@ -9,7 +9,7 @@
       <span class="text-gray-400">Classes:</span>
       <input
         type="text"
-        class="block font-mono mt-1 w-full p-1 bg-gray-500 focus:outline-none border-2 border-black focus:border-gray-400"
+        class="block font-mono text-sm mt-1 w-full p-1 bg-gray-500 focus:outline-none border-2 border-black focus:border-gray-400"
         :value="(selected.classes || []).join(' ')"
         @input="selected.classes = $event.target.value.split(' ')"
       />

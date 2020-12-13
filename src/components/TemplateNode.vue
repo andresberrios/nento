@@ -8,7 +8,7 @@
     :class="node.classes"
     @click.self="editor.selectNode(node)"
   >
-    <DomNode
+    <TemplateNode
       v-for="(child, index) in node.children"
       :key="index"
       :node="child"
@@ -22,7 +22,7 @@ import { injectEditor } from "@/state/editor";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: "DomNode",
+  name: "TemplateNode",
   props: {
     node: { required: true, type: [Object as () => TemplateNode, String] }
   },
