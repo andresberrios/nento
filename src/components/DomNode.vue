@@ -6,19 +6,19 @@
     v-bind="node.attrs"
     class="selectable"
     :class="node.classes"
-    @click.self="$emit('selected', node)"
+    @click.self="editor.selectNode(node)"
   >
     <DomNode
       v-for="(child, index) in node.children"
       :key="index"
       :node="child"
-      @selected="$emit('selected', $event)"
     />
   </component>
 </template>
 
 <script lang="ts">
 import { TemplateNode } from "@/lib/template";
+import { injectEditor } from "@/state/editor";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -26,7 +26,11 @@ export default defineComponent({
   props: {
     node: { required: true, type: [Object as () => TemplateNode, String] }
   },
-  emits: ["selected"]
+  setup() {
+    return {
+      editor: injectEditor()
+    };
+  }
 });
 </script>
 
