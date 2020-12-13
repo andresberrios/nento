@@ -5,9 +5,11 @@ import { ComponentDefinition, TemplateNode } from "@/lib/template";
 export const createEditor = () => {
   const state: {
     selected: TemplateNode | null;
+    hovered: TemplateNode | null;
     root: ComponentDefinition;
   } = reactive({
     selected: null,
+    hovered: null,
     root: demo
   });
 
@@ -15,6 +17,9 @@ export const createEditor = () => {
     state, // Consider making readonly
     selectNode(node: TemplateNode) {
       state.selected = node;
+    },
+    hoverNode(node: TemplateNode) {
+      state.hovered = node;
     },
     save() {
       window.localStorage.setItem("component", JSON.stringify(state.root));

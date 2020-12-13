@@ -4,9 +4,10 @@
     v-if="typeof node !== 'string'"
     :is="node.tag"
     v-bind="node.attrs"
-    class="selectable"
-    :class="node.classes"
+    :class="classes"
     @click.self="editor.selectNode(node)"
+    @mouseover.self="editor.hoverNode(node)"
+    @mouseout.self="editor.hoverNode(null)"
   >
     <TemplateNode
       v-for="(child, index) in node.children"
@@ -19,25 +20,42 @@
 <script lang="ts">
 import { TemplateNode } from "@/lib/template";
 import { injectEditor } from "@/state/editor";
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 
 export default defineComponent({
   name: "TemplateNode",
   props: {
     node: { required: true, type: [Object as () => TemplateNode, String] }
   },
-  setup() {
+  setup(props) {
+    const editor = injectEditor();
     return {
-      editor: injectEditor()
+      editor,
+      classes: computed(() => {
+        if (typeof props.node === "string" || "bindingId" in props.node) {
+          return undefined;
+        }
+        const result: { [c: string]: boolean } = {};
+        for (const c of props.node.classes ?? []) {
+          if (typeof c !== "string") {
+            throw new Error("Not yet implemented!");
+          }
+          result[c] = true;
+        }
+        result.selected = props.node === editor.state.selected;
+        result.hovered = props.node === editor.state.hovered;
+        return result;
+      })
     };
   }
 });
 </script>
 
 <style lang="scss" scoped>
-.selectable {
-  &:hover {
-    outline: 1px yellow dashed;
-  }
+.hovered {
+  outline: 2px yellow dashed;
+}
+.selected {
+  outline: 2px red solid;
 }
 </style>

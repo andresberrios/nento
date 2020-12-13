@@ -1,8 +1,19 @@
 <template>
   <div>
-    <span :class="{ 'text-gray-500': isText, 'font-mono': !isText }">
+    <div
+      @click.self="editor.selectNode(node)"
+      @mouseover.self="editor.hoverNode(node)"
+      @mouseout.self="editor.hoverNode(null)"
+      class="px-2 py-1"
+      :class="{
+        'text-gray-500': isText,
+        'font-mono': !isText,
+        selected: isSelected,
+        hovered: isHovered
+      }"
+    >
       {{ label }}
-    </span>
+    </div>
     <div class="ml-4">
       <TreeViewNode
         v-for="(child, index) in node.children"
@@ -27,7 +38,8 @@ export default defineComponent({
     const editor = injectEditor();
     return {
       editor,
-      selected: computed(() => editor.state.selected),
+      isSelected: computed(() => props.node === editor.state.selected),
+      isHovered: computed(() => props.node === editor.state.hovered),
       isText: computed(() => typeof props.node === "string"),
       label: computed(() => {
         if (typeof props.node === "string" || "bindingId" in props.node) {
@@ -40,3 +52,14 @@ export default defineComponent({
   }
 });
 </script>
+
+<style lang="scss" scoped>
+.hovered {
+  // outline: 2px yellow dashed;
+  background: transparentize($color: yellow, $amount: 0.8);
+}
+.selected {
+  // outline: 2px red solid;
+  background: transparentize($color: red, $amount: 0.8);
+}
+</style>
