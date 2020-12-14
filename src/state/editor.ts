@@ -1,6 +1,6 @@
-import { inject, InjectionKey, provide, reactive } from "vue";
+import { computed, inject, InjectionKey, provide, reactive } from "vue";
 import demo from "@/assets/demo";
-import { ComponentDefinition, TemplateNode } from "@/lib/template";
+import { ComponentDefinition, TemplateNode, walk } from "@/lib/template";
 
 export const createEditor = () => {
   const state: {
@@ -13,13 +13,32 @@ export const createEditor = () => {
     root: demo
   });
 
+  const nodes = computed(() => {
+    const list: Array<{ node: TemplateNode; parent?: TemplateNode }> = [];
+    walk(state.root, (node, parent) => {
+      list.push({
+        node,
+        parent
+      });
+    });
+    return list;
+  });
+
   return {
-    state, // Consider making readonly
+    state, // Consider making readonly,
+    nodes,
+    selectedParent: computed(() => {
+      const entry = nodes.value.find(e => e.node === state.selected);
+      return entry?.parent;
+    }),
     selectNode(node: TemplateNode) {
       state.selected = node;
     },
     hoverNode(node: TemplateNode) {
       state.hovered = node;
+    },
+    findBinding(id: string) {
+      return state.root.bindings.find(b => b.id === id);
     },
     save() {
       window.localStorage.setItem("component", JSON.stringify(state.root));

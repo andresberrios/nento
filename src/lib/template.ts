@@ -34,10 +34,24 @@ export interface ComponentDefinition {
   bindings: Binding[];
 }
 
-export class ComponentManager {
-  constructor(public component: ComponentDefinition) {}
+export function walkTree(
+  node: TemplateNode,
+  callback: (node: TemplateNode, parent?: TemplateNode) => void,
+  parent?: TemplateNode
+) {
+  callback(node, parent);
+  if (typeof node !== "string" && "children" in node && node.children?.length) {
+    for (const child of node.children) {
+      walkTree(child, callback, node);
+    }
+  }
+}
 
-  findBinding(id: string) {
-    return this.component.bindings.find(b => b.id === id);
+export function walk(
+  component: ComponentDefinition,
+  callback: (node: TemplateNode, parent?: TemplateNode) => void
+) {
+  for (const node of component.template) {
+    walkTree(node, callback);
   }
 }

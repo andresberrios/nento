@@ -4,7 +4,7 @@
       @click.self="editor.selectNode(node)"
       @mouseover.self="editor.hoverNode(node)"
       @mouseout.self="editor.hoverNode(null)"
-      class="px-2 py-1"
+      class="px-2 py-1 cursor-pointer"
       :class="{
         'text-gray-500': isText,
         'font-mono': !isText,
@@ -14,7 +14,7 @@
     >
       {{ label }}
     </div>
-    <div class="ml-4">
+    <div class="ml-4" v-if="showChildren">
       <TreeViewNode
         v-for="(child, index) in node.children"
         :key="index"
@@ -32,7 +32,8 @@ import { computed, defineComponent } from "vue";
 export default defineComponent({
   name: "TreeViewNode",
   props: {
-    node: { required: true, type: [Object as () => TemplateNode, String] }
+    node: { required: true, type: [Object as () => TemplateNode, String] },
+    showChildren: { type: Boolean, default: true }
   },
   setup(props) {
     const editor = injectEditor();

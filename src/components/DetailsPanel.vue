@@ -7,7 +7,10 @@
 
     <div v-if="typeof selected === 'string'">
       <span class="text-gray-400">Parent:</span>
-      <!-- Show the parent node using TreeViewNode to support hover and select -->
+      <TreeViewNode
+        :node="editor.selectedParent.value"
+        :show-children="false"
+      />
     </div>
 
     <div v-else-if="selected !== null" class="mt-3">
@@ -25,9 +28,11 @@
 <script lang="ts">
 import { injectEditor } from "@/state/editor";
 import { computed, defineComponent } from "vue";
+import TreeViewNode from "./TreeViewNode.vue";
 
 export default defineComponent({
   name: "DetailsPanel",
+  components: { TreeViewNode },
   setup() {
     const editor = injectEditor();
     return {
