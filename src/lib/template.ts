@@ -11,23 +11,32 @@ export interface TemplateElementAttributes {
   [key: string]: string | BindingRef;
 }
 
-export interface ConditionalCssClass {
-  class: string;
+export interface CssClasses {
+  [cssClass: string]: true | BindingRef;
+}
+
+export interface TemplateTextNode {
+  type: "text";
+  content: string;
+}
+
+export interface TemplateBindingNode {
+  type: "binding";
   bindingId: string;
 }
 
-export type CssClasses = Array<string | ConditionalCssClass>;
-
-export type TemplateTextNode = string | BindingRef;
-
 export interface TemplateElementNode {
+  type: "element";
   tag: string;
   attrs?: TemplateElementAttributes;
   classes?: CssClasses;
   children?: TemplateNode[];
 }
 
-export type TemplateNode = TemplateElementNode | TemplateTextNode;
+export type TemplateNode =
+  | TemplateElementNode
+  | TemplateTextNode
+  | TemplateBindingNode;
 
 export interface ComponentDefinition {
   template: TemplateNode[];
@@ -40,7 +49,7 @@ export function walkTree(
   parent?: TemplateNode
 ) {
   callback(node, parent);
-  if (typeof node !== "string" && "children" in node && node.children?.length) {
+  if ("children" in node && node.children?.length) {
     for (const child of node.children) {
       walkTree(child, callback, node);
     }

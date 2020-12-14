@@ -1,26 +1,47 @@
 import { ComponentDefinition } from "@/lib/template";
 
-export default {
+const data: ComponentDefinition = {
   bindings: [],
   template: [
     {
+      type: "element",
       tag: "article",
-      classes: ["bg-yellow-500", "h-screen", "p-10"],
+      classes: { "bg-yellow-500": true, "h-screen": true, "p-10": true },
       children: [
         {
+          type: "element",
           tag: "h1",
-          classes: ["text-2xl", "mb-4"],
-          children: ["Hello World!"]
+          classes: { "text-2xl": true, "mb-4": true },
+          children: [
+            {
+              type: "text",
+              content: "Hello World!"
+            }
+          ]
         },
         {
+          type: "element",
           tag: "p",
           children: [
-            "Paragraphs work too. ",
-            { tag: "strong", children: ["Bold stuff."] }
+            {
+              type: "text",
+              content: "Paragraphs work too. "
+            },
+            {
+              type: "element",
+              tag: "strong",
+              children: [{ type: "text", content: "Bold stuff." }]
+            }
           ]
         }
       ]
     },
-    { tag: "footer", classes: ["bg-yellow-300", "h-32"] }
+    {
+      type: "element",
+      tag: "footer",
+      classes: { "bg-yellow-300": true, "h-32": true }
+    }
   ]
-} as ComponentDefinition;
+};
+
+export default data;

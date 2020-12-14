@@ -32,7 +32,7 @@ import { computed, defineComponent } from "vue";
 export default defineComponent({
   name: "TreeViewNode",
   props: {
-    node: { required: true, type: [Object as () => TemplateNode, String] },
+    node: { required: true, type: Object as () => TemplateNode },
     showChildren: { type: Boolean, default: true }
   },
   setup(props) {
@@ -41,10 +41,12 @@ export default defineComponent({
       editor,
       isSelected: computed(() => props.node === editor.state.selected),
       isHovered: computed(() => props.node === editor.state.hovered),
-      isText: computed(() => typeof props.node === "string"),
+      isText: computed(() => props.node.type === "text"),
       label: computed(() => {
-        if (typeof props.node === "string" || "bindingId" in props.node) {
-          return props.node;
+        if (props.node.type === "text") {
+          return props.node.content;
+        } else if (props.node.type === "binding") {
+          return "Binding: " + props.node.bindingId;
         } else {
           return props.node.tag;
         }

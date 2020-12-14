@@ -55,7 +55,6 @@ export const createEditor = () => {
 };
 
 export type Editor = ReturnType<typeof createEditor>;
-
 export const editorSymbol: InjectionKey<Editor> = Symbol("editor");
 
 export function provideEditor() {
