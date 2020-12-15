@@ -4,15 +4,12 @@
       class="w-1/5 h-screen overflow-y-scroll bg-gray-700 text-gray-300 p-4 border-r-2 border-black"
     >
       <div class="mb-3">
-        <button
-          class="border-2 border-black px-2 py-1 mr-1"
-          @click="editor.save()"
-        >
+        <n-button class="mr-1" @click="editor.save()">
           Save
-        </button>
-        <button class="border-2 border-black px-2 py-1" @click="editor.load()">
+        </n-button>
+        <n-button @click="editor.load()">
           Load
-        </button>
+        </n-button>
       </div>
       <ul class="border-b-2 border-black mb-4">
         <li

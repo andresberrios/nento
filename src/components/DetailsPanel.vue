@@ -1,14 +1,27 @@
 <template>
   <div v-if="selected !== null">
-    <span class="text-gray-400">Selected:</span>
-    <pre class="font-bold">{{ selected.tag || "Text node" }}</pre>
+    <div class="border-b-2 border-black pb-3">
+      <div>
+        <span class="text-gray-400">Selected:</span>
+        <pre class="font-bold">{{ selected.tag || "Text node" }}</pre>
+      </div>
+      <div class="mt-3">
+        <span class="text-gray-400">Parent:</span>
+        <TreeViewNode
+          :node="editor.selectedParent.value"
+          :show-children="false"
+        />
+      </div>
+      <div class="mt-3">
+        <n-button>Delete</n-button>
+        <n-button>Up</n-button>
+        <n-button>Down</n-button>
+        <n-button>Out</n-button>
+        <n-button>In</n-button>
+      </div>
+    </div>
 
-    <div v-if="selected.type === 'text'">
-      <span class="text-gray-400">Parent:</span>
-      <TreeViewNode
-        :node="editor.selectedParent.value"
-        :show-children="false"
-      />
+    <div v-if="selected.type === 'text'" class="mt-3">
       <span class="text-gray-400 mt-3">Content:</span>
       <textarea
         class="block text-sm mt-1 w-full p-1 bg-gray-500 focus:outline-none border-2 border-black focus:border-gray-400"
