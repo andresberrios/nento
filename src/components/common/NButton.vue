@@ -30,5 +30,9 @@ export default defineComponent({
   &:active {
     @apply bg-gray-800;
   }
+  &:disabled {
+    @apply bg-gray-800;
+    @apply cursor-not-allowed;
+  }
 }
 </style>

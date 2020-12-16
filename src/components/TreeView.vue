@@ -1,7 +1,7 @@
 <template>
   <div>
     <TreeViewNode
-      v-for="(node, index) in state.root.template"
+      v-for="(node, index) in state.component.template"
       :key="index"
       :node="node"
     />

@@ -8,16 +8,38 @@
       <div class="mt-3">
         <span class="text-gray-400">Parent:</span>
         <TreeViewNode
+          v-if="editor.selectedParent.value"
           :node="editor.selectedParent.value"
           :show-children="false"
         />
+        <pre v-else class="text-gray-500">None</pre>
       </div>
       <div class="mt-3">
         <n-button>Delete</n-button>
-        <n-button>Up</n-button>
-        <n-button>Down</n-button>
-        <n-button>Out</n-button>
-        <n-button>In</n-button>
+        <n-button
+          :disabled="!editor.canMoveUp(selected)"
+          @click="editor.moveUp(selected)"
+        >
+          Up
+        </n-button>
+        <n-button
+          :disabled="!editor.canMoveDown(selected)"
+          @click="editor.moveDown(selected)"
+        >
+          Down
+        </n-button>
+        <n-button
+          :disabled="!editor.canMoveIn(selected)"
+          @click="editor.moveIn(selected)"
+        >
+          In
+        </n-button>
+        <n-button
+          :disabled="!editor.canMoveOut(selected)"
+          @click="editor.moveOut(selected)"
+        >
+          Out
+        </n-button>
       </div>
     </div>
 

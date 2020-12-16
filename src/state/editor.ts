@@ -1,21 +1,18 @@
 import { computed, inject, InjectionKey, provide, reactive } from "vue";
 import demo from "@/assets/demo";
 import { ComponentDefinition, TemplateNode, walk } from "@/lib/template";
+import { setupMover } from "@/lib/nodeMover";
 
-export const createEditor = () => {
-  const state: {
-    selected: TemplateNode | null;
-    hovered: TemplateNode | null;
-    root: ComponentDefinition;
-  } = reactive({
-    selected: null,
-    hovered: null,
-    root: demo
-  });
+export interface EditorState {
+  selected: TemplateNode | null;
+  hovered: TemplateNode | null;
+  component: ComponentDefinition;
+}
 
+export function setupUtil(state: EditorState) {
   const nodes = computed(() => {
     const list: Array<{ node: TemplateNode; parent?: TemplateNode }> = [];
-    walk(state.root, (node, parent) => {
+    walk(state.component, (node, parent) => {
       list.push({
         node,
         parent
@@ -24,31 +21,75 @@ export const createEditor = () => {
     return list;
   });
 
+  function findNodeEntry(node: TemplateNode) {
+    return nodes.value.find(e => e.node === node);
+  }
+
+  function findNodeParent(node: TemplateNode) {
+    return findNodeEntry(node)?.parent;
+  }
+
+  function findNodeSiblings(node: TemplateNode) {
+    const parent = findNodeParent(node);
+    return parent !== undefined &&
+      "children" in parent &&
+      parent.children !== undefined
+      ? parent.children
+      : state.component.template;
+  }
+
+  const selectedParent = computed(() => {
+    const entry = state.selected && findNodeEntry(state.selected);
+    return entry?.parent;
+  });
+
+  function selectNode(node: TemplateNode) {
+    state.selected = node;
+  }
+
+  function hoverNode(node: TemplateNode) {
+    state.hovered = node;
+  }
+
+  function findBinding(id: string) {
+    return state.component.bindings.find(b => b.id === id);
+  }
+
   return {
-    state, // Consider making readonly,
     nodes,
-    selectedParent: computed(() => {
-      const entry = nodes.value.find(e => e.node === state.selected);
-      return entry?.parent;
-    }),
-    selectNode(node: TemplateNode) {
-      state.selected = node;
-    },
-    hoverNode(node: TemplateNode) {
-      state.hovered = node;
-    },
-    findBinding(id: string) {
-      return state.root.bindings.find(b => b.id === id);
-    },
+    findNodeEntry,
+    findNodeParent,
+    findNodeSiblings,
+    selectedParent,
+    selectNode,
+    hoverNode,
+    findBinding
+  };
+}
+
+export const createEditor = () => {
+  const state: EditorState = reactive({
+    selected: null,
+    hovered: null,
+    component: demo
+  });
+
+  const util = setupUtil(state);
+  const mover = setupMover(util);
+
+  return {
+    state,
+    ...util,
+    ...mover,
     save() {
-      window.localStorage.setItem("component", JSON.stringify(state.root));
+      window.localStorage.setItem("component", JSON.stringify(state.component));
     },
     load() {
       const rawData = window.localStorage.getItem("component");
       if (rawData) {
-        state.root = JSON.parse(rawData);
+        state.component = JSON.parse(rawData);
       } else {
-        state.root = { template: [], bindings: [] };
+        state.component = { template: [], bindings: [] };
       }
     }
   };

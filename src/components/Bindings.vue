@@ -1,5 +1,5 @@
 <template>
-  <div v-for="binding in state.root.bindings" :key="binding.id">
+  <div v-for="binding in state.component.bindings" :key="binding.id">
     {{ binding.id }} - {{ binding.spec }}
   </div>
 </template>

@@ -38,7 +38,7 @@
     <div class="w-3/5 h-screen overflow-y-scroll">
       <div>
         <TemplateNode
-          v-for="(child, index) in editor.state.root.template"
+          v-for="(child, index) in editor.state.component.template"
           :key="index"
           :node="child"
         />
