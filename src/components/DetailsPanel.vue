@@ -15,7 +15,7 @@
         <pre v-else class="text-gray-500">None</pre>
       </div>
       <div class="mt-3">
-        <n-button>Delete</n-button>
+        <n-button @click="editor.deleteNode(selected)">Delete</n-button>
         <n-button
           :disabled="!editor.canMoveUp(selected)"
           @click="editor.moveUp(selected)"

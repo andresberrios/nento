@@ -75,7 +75,7 @@ export const createEditor = () => {
   });
 
   const util = setupUtil(state);
-  const mover = setupMover(util);
+  const mover = setupMover(state, util);
 
   return {
     state,
@@ -91,6 +91,8 @@ export const createEditor = () => {
       } else {
         state.component = { template: [], bindings: [] };
       }
+      state.selected = null;
+      state.hovered = null;
     }
   };
 };

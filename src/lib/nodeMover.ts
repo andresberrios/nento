@@ -1,7 +1,10 @@
 import { TemplateNode } from "./template";
-import { setupUtil } from "../state/editor";
+import { EditorState, setupUtil } from "../state/editor";
 
-export function setupMover(util: ReturnType<typeof setupUtil>) {
+export function setupMover(
+  state: EditorState,
+  util: ReturnType<typeof setupUtil>
+) {
   function canMoveUp(node: TemplateNode) {
     const siblings = util.findNodeSiblings(node);
     const index = siblings.indexOf(node);
@@ -74,6 +77,13 @@ export function setupMover(util: ReturnType<typeof setupUtil>) {
     }
   }
 
+  function deleteNode(node: TemplateNode) {
+    const siblings = util.findNodeSiblings(node);
+    const index = siblings.indexOf(node);
+    siblings.splice(index, 1);
+    state.selected = null;
+  }
+
   return {
     moveDown,
     moveUp,
@@ -82,6 +92,7 @@ export function setupMover(util: ReturnType<typeof setupUtil>) {
     canMoveDown,
     canMoveUp,
     canMoveOut,
-    canMoveIn
+    canMoveIn,
+    deleteNode
   };
 }

@@ -48,12 +48,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, onBeforeUnmount, onMounted, reactive } from "vue";
 import { provideEditor } from "@/state/editor";
 import TemplateNodeComponent from "./TemplateNode.vue";
 import DetailsPanel from "./DetailsPanel.vue";
 import TreeView from "./TreeView.vue";
 import Bindings from "./Bindings.vue";
+import { setupKeyDownHandlers } from "../lib/hotkeys";
 
 export default defineComponent({
   name: "Editor",
@@ -65,8 +66,18 @@ export default defineComponent({
   },
   setup() {
     const state = reactive({ currentPrimaryTab: "treeView" });
+    const editor = provideEditor();
+
+    const { keyDownHandler } = setupKeyDownHandlers(editor);
+    onMounted(() => {
+      document.addEventListener("keydown", keyDownHandler);
+    });
+    onBeforeUnmount(() => {
+      document.removeEventListener("keydown", keyDownHandler);
+    });
+
     return {
-      editor: provideEditor(),
+      editor,
       state
     };
   }
