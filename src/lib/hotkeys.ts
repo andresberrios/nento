@@ -9,6 +9,10 @@ export function setupKeyDownHandlers(editor: Editor) {
           editor.moveUp(editor.state.selected);
         } else if (event.key === "ArrowDown") {
           editor.moveDown(editor.state.selected);
+        } else if (event.key === "ArrowLeft") {
+          editor.moveOut(editor.state.selected);
+        } else if (event.key === "ArrowRight") {
+          editor.moveIn(editor.state.selected);
         } else if (event.key === "Delete" || event.key === "Backspace") {
           editor.deleteNode(editor.state.selected);
         }
