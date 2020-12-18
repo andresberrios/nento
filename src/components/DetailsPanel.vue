@@ -2,14 +2,12 @@
   <div v-if="selected !== null">
     <div class="border-b-2 border-black pb-3">
       <div>
-        <span class="text-gray-400">Selected:</span>
-        <br />
-        <span v-if="selected.type === 'text'" class="font-mono font-bold">
+        <span class="text-gray-400 inline-block mb-1">Selected:</span>
+        <div v-if="selected.type === 'text'" class="font-mono ml-2">
           Text node
-        </span>
+        </div>
         <n-input-save
           v-else-if="selected.type === 'element'"
-          class="mt-1"
           :modelValue="selected.tag"
           @update:modelValue="selected.tag = $event"
         />
