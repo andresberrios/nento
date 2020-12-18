@@ -3,7 +3,16 @@
     <div class="border-b-2 border-black pb-3">
       <div>
         <span class="text-gray-400">Selected:</span>
-        <pre class="font-bold">{{ selected.tag || "Text node" }}</pre>
+        <br />
+        <span v-if="selected.type === 'text'" class="font-mono font-bold">
+          Text node
+        </span>
+        <n-input-save
+          v-else-if="selected.type === 'element'"
+          class="mt-1"
+          :modelValue="selected.tag"
+          @update:modelValue="selected.tag = $event"
+        />
       </div>
       <div class="mt-3">
         <span class="text-gray-400">Parent:</span>
@@ -12,7 +21,7 @@
           :node="editor.selectedParent.value"
           :show-children="false"
         />
-        <pre v-else class="text-gray-500">None</pre>
+        <pre v-else class="text-gray-500 py-1 ml-2">None</pre>
       </div>
       <div class="mt-3">
         <n-button @click="editor.deleteNode(selected)">Delete</n-button>
@@ -70,11 +79,12 @@
 <script lang="ts">
 import { injectEditor } from "@/state/editor";
 import { computed, defineComponent } from "vue";
+import NInputSave from "./common/NInputSave.vue";
 import TreeViewNode from "./TreeViewNode.vue";
 
 export default defineComponent({
   name: "DetailsPanel",
-  components: { TreeViewNode },
+  components: { TreeViewNode, NInputSave },
   setup() {
     const editor = injectEditor();
     return {

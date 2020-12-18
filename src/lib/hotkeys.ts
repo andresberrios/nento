@@ -17,6 +17,13 @@ export function setupKeyDownHandlers(editor: Editor) {
           editor.deleteNode(editor.state.selected);
         }
       }
+    } else if (editor.state.selected && editor.state.treeViewFocused) {
+      event.preventDefault();
+      if (event.key === "ArrowUp") {
+        editor.selectPreviousNode();
+      } else if (event.key === "ArrowDown") {
+        editor.selectNextNode();
+      }
     }
   }
 

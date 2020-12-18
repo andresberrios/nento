@@ -6,6 +6,7 @@ import { setupMover } from "@/lib/nodeMover";
 export interface EditorState {
   selected: TemplateNode | null;
   hovered: TemplateNode | null;
+  treeViewFocused: boolean;
   component: ComponentDefinition;
 }
 
@@ -47,6 +48,24 @@ export function setupUtil(state: EditorState) {
     state.selected = node;
   }
 
+  function selectPreviousNode() {
+    if (state.selected) {
+      const index = nodes.value.findIndex(e => e.node === state.selected);
+      if (index > 0) {
+        state.selected = nodes.value[index - 1].node;
+      }
+    }
+  }
+
+  function selectNextNode() {
+    if (state.selected) {
+      const index = nodes.value.findIndex(e => e.node === state.selected);
+      if (index < nodes.value.length - 1) {
+        state.selected = nodes.value[index + 1].node;
+      }
+    }
+  }
+
   function hoverNode(node: TemplateNode) {
     state.hovered = node;
   }
@@ -62,6 +81,8 @@ export function setupUtil(state: EditorState) {
     findNodeSiblings,
     selectedParent,
     selectNode,
+    selectPreviousNode,
+    selectNextNode,
     hoverNode,
     findBinding
   };
@@ -71,6 +92,7 @@ export const createEditor = () => {
   const state: EditorState = reactive({
     selected: null,
     hovered: null,
+    treeViewFocused: false,
     component: demo
   });
 

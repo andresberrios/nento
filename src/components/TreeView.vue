@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div
+    tabindex="0"
+    class="focus:outline-none"
+    @focus="state.treeViewFocused = true"
+    @blur="state.treeViewFocused = false"
+  >
     <TreeViewNode
       v-for="(node, index) in state.component.template"
       :key="index"
