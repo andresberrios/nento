@@ -4,8 +4,15 @@ module.exports = {
   theme: {
     extend: {}
   },
-  variants: {
-    extend: {}
-  },
+  variants: [
+    "responsive",
+    "group-hover",
+    "group-focus",
+    "focus-within",
+    "hover",
+    "focus",
+    "active",
+    "disabled"
+  ],
   plugins: []
 };

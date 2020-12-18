@@ -1,5 +1,6 @@
-import { TemplateNode } from "./template";
-import { EditorState, setupUtil } from "../state/editor";
+import { TemplateNode } from "../lib/template";
+import { EditorState } from "./editor";
+import { setupUtil } from "./util";
 
 export function setupMover(
   state: EditorState,
@@ -78,10 +79,51 @@ export function setupMover(
   }
 
   function deleteNode(node: TemplateNode) {
+    const parent = util.findNodeParent(node);
     const siblings = util.findNodeSiblings(node);
     const index = siblings.indexOf(node);
     siblings.splice(index, 1);
-    state.selected = null;
+    state.selected = siblings[index] ?? siblings[index - 1] ?? parent ?? null;
+  }
+
+  function generateNewNode(type: "element" | "text") {
+    const node: TemplateNode | null =
+      type === "element"
+        ? { type: "element", tag: "div" }
+        : type === "text"
+        ? { type: "text", content: "New text node" }
+        : null;
+    if (node === null) {
+      throw new TypeError("Invalid node type");
+    }
+    return node;
+  }
+
+  function insertNode(
+    nodeOrType: TemplateNode | "element" | "text",
+    parent: TemplateNode | null = state.selected
+  ) {
+    const node =
+      typeof nodeOrType !== "string" && "type" in nodeOrType
+        ? nodeOrType
+        : generateNewNode(nodeOrType);
+    if (parent?.type === "element") {
+      if (parent.children === undefined) {
+        parent.children = [node];
+      } else {
+        parent.children.unshift(node);
+      }
+    } else if (parent !== null) {
+      const grandParent = util.findNodeParent(parent);
+      if (grandParent) {
+        insertNode(node, grandParent);
+      } else {
+        state.component.template.unshift(node);
+      }
+    } else {
+      state.component.template.unshift(node);
+    }
+    state.selected = node;
   }
 
   return {
@@ -93,6 +135,7 @@ export function setupMover(
     canMoveUp,
     canMoveOut,
     canMoveIn,
-    deleteNode
+    deleteNode,
+    insertNode
   };
 }

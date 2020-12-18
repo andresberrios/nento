@@ -5,6 +5,8 @@
       class="font-mono px-2 bg-transparent focus:outline-none flex-grow"
       v-model="state.candidate"
       @blur="onBlur"
+      @keydown.enter="onSave"
+      ref="input"
     />
     <n-button class="ml-0" @click="onSave" ref="button">
       Save
@@ -23,12 +25,14 @@ export default defineComponent({
   setup(props, ctx) {
     const state = reactive({ candidate: props.modelValue });
     const button = ref<typeof NButton | null>(null);
+    const input = ref<HTMLInputElement | null>(null);
     watchEffect(() => {
       state.candidate = props.modelValue;
     });
     async function onSave() {
       ctx.emit("update:modelValue", state.candidate);
       button.value?.$el.blur();
+      input.value?.blur();
     }
     function onBlur() {
       setTimeout(() => {
@@ -39,6 +43,7 @@ export default defineComponent({
     return {
       state,
       button,
+      input,
       onSave,
       onBlur
     };

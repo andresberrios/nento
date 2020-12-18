@@ -1,7 +1,8 @@
-import { computed, inject, InjectionKey, provide, reactive } from "vue";
+import { inject, InjectionKey, provide, reactive } from "vue";
 import demo from "@/assets/demo";
-import { ComponentDefinition, TemplateNode, walk } from "@/lib/template";
-import { setupMover } from "@/lib/nodeMover";
+import { ComponentDefinition, TemplateNode } from "@/lib/template";
+import { setupMover } from "@/state/mover";
+import { setupUtil } from "@/state/util";
 
 export interface EditorState {
   selected: TemplateNode | null;
@@ -10,85 +11,7 @@ export interface EditorState {
   component: ComponentDefinition;
 }
 
-export function setupUtil(state: EditorState) {
-  const nodes = computed(() => {
-    const list: Array<{ node: TemplateNode; parent?: TemplateNode }> = [];
-    walk(state.component, (node, parent) => {
-      list.push({
-        node,
-        parent
-      });
-    });
-    return list;
-  });
-
-  function findNodeEntry(node: TemplateNode) {
-    return nodes.value.find(e => e.node === node);
-  }
-
-  function findNodeParent(node: TemplateNode) {
-    return findNodeEntry(node)?.parent;
-  }
-
-  function findNodeSiblings(node: TemplateNode) {
-    const parent = findNodeParent(node);
-    return parent !== undefined &&
-      "children" in parent &&
-      parent.children !== undefined
-      ? parent.children
-      : state.component.template;
-  }
-
-  const selectedParent = computed(() => {
-    const entry = state.selected && findNodeEntry(state.selected);
-    return entry?.parent;
-  });
-
-  function selectNode(node: TemplateNode) {
-    state.selected = node;
-  }
-
-  function selectPreviousNode() {
-    if (state.selected) {
-      const index = nodes.value.findIndex(e => e.node === state.selected);
-      if (index > 0) {
-        state.selected = nodes.value[index - 1].node;
-      }
-    }
-  }
-
-  function selectNextNode() {
-    if (state.selected) {
-      const index = nodes.value.findIndex(e => e.node === state.selected);
-      if (index < nodes.value.length - 1) {
-        state.selected = nodes.value[index + 1].node;
-      }
-    }
-  }
-
-  function hoverNode(node: TemplateNode) {
-    state.hovered = node;
-  }
-
-  function findBinding(id: string) {
-    return state.component.bindings.find(b => b.id === id);
-  }
-
-  return {
-    nodes,
-    findNodeEntry,
-    findNodeParent,
-    findNodeSiblings,
-    selectedParent,
-    selectNode,
-    selectPreviousNode,
-    selectNextNode,
-    hoverNode,
-    findBinding
-  };
-}
-
-export const createEditor = () => {
+export const setupEditor = () => {
   const state: EditorState = reactive({
     selected: null,
     hovered: null,
@@ -119,11 +42,11 @@ export const createEditor = () => {
   };
 };
 
-export type Editor = ReturnType<typeof createEditor>;
+export type Editor = ReturnType<typeof setupEditor>;
 export const editorSymbol: InjectionKey<Editor> = Symbol("editor");
 
 export function provideEditor() {
-  const instance = createEditor();
+  const instance = setupEditor();
   provide(editorSymbol, instance);
   return instance;
 }

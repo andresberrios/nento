@@ -1,4 +1,12 @@
 <template>
+  <div class="mb-2">
+    <n-button @click="insertNode('element')">
+      + Element
+    </n-button>
+    <n-button @click="insertNode('text')">
+      + Text
+    </n-button>
+  </div>
   <div
     tabindex="0"
     class="focus:outline-none"
