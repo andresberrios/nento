@@ -9,7 +9,8 @@
         'text-gray-500': isText,
         'font-mono': !isText,
         selected: isSelected,
-        hovered: isHovered
+        hovered: isHovered,
+        focused: isSelected && editor.state.treeViewFocused
       }"
     >
       {{ label }}
@@ -62,5 +63,9 @@ export default defineComponent({
 }
 .selected {
   background: transparentize($color: red, $amount: 0.8);
+}
+.focused {
+  @apply ring-2;
+  @apply ring-gray-500;
 }
 </style>
