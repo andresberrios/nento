@@ -18,6 +18,7 @@
           v-if="editor.selectedParent.value"
           :node="editor.selectedParent.value"
           :show-children="false"
+          @click="editor.state.hovered = editor.selectedParent.value"
         />
         <pre v-else class="text-gray-500 py-1 ml-2">None</pre>
       </div>
