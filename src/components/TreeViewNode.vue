@@ -45,7 +45,13 @@ export default defineComponent({
       isText: computed(() => props.node.type === "text"),
       label: computed(() => {
         if (props.node.type === "text") {
-          return props.node.content;
+          if (!props.node.content) {
+            return "No content";
+          }
+          const words = props.node.content.split(" ", 10);
+          return words.length < 10
+            ? props.node.content
+            : words.slice(0, 10).join(" ") + "...";
         } else if (props.node.type === "binding") {
           return "Binding: " + props.node.bindingId;
         } else {
