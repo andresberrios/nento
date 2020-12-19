@@ -6,7 +6,7 @@ import { setupUtil } from "@/state/util";
 
 export interface EditorState {
   selected: TemplateNode | null;
-  hovered: TemplateNode | null;
+  highlighted: TemplateNode | null;
   treeViewFocused: boolean;
   component: ComponentDefinition;
 }
@@ -14,7 +14,7 @@ export interface EditorState {
 export const setupEditor = () => {
   const state: EditorState = reactive({
     selected: null,
-    hovered: null,
+    highlighted: null,
     treeViewFocused: false,
     component: demo
   });
@@ -37,7 +37,7 @@ export const setupEditor = () => {
         state.component = { template: [], bindings: [] };
       }
       state.selected = null;
-      state.hovered = null;
+      state.highlighted = null;
     }
   };
 };

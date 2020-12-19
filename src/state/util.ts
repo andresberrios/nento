@@ -58,8 +58,8 @@ export function setupUtil(state: EditorState) {
     }
   }
 
-  function hoverNode(node: TemplateNode) {
-    state.hovered = node;
+  function highlightNode(node: TemplateNode) {
+    state.highlighted = node;
   }
 
   function findBinding(id: string) {
@@ -75,7 +75,7 @@ export function setupUtil(state: EditorState) {
     selectNode,
     selectPreviousNode,
     selectNextNode,
-    hoverNode,
+    highlightNode,
     findBinding
   };
 }

@@ -3,16 +3,16 @@
     v-if="node.type === 'text'"
     :class="classes"
     @click.self="editor.selectNode(node)"
-    @mouseover.self="editor.hoverNode(node)"
-    @mouseout.self="editor.hoverNode(null)"
+    @mouseover.self="editor.highlightNode(node)"
+    @mouseout.self="editor.highlightNode(null)"
     >{{ node.content }}</span
   >
   <span
     v-else-if="node.type === 'binding'"
     :class="classes"
     @click.self="editor.selectNode(node)"
-    @mouseover.self="editor.hoverNode(node)"
-    @mouseout.self="editor.hoverNode(null)"
+    @mouseover.self="editor.highlightNode(node)"
+    @mouseout.self="editor.highlightNode(null)"
     >&#123;&#123; Binding: {{ node.bindingId }} &#125;&#125;</span
   >
   <component
@@ -21,8 +21,8 @@
     v-bind="node.attrs"
     :class="classes"
     @click.self="editor.selectNode(node)"
-    @mouseover.self="editor.hoverNode(node)"
-    @mouseout.self="editor.hoverNode(null)"
+    @mouseover.self="editor.highlightNode(node)"
+    @mouseout.self="editor.highlightNode(null)"
   >
     <TemplateNode
       v-for="(child, index) in node.children"
@@ -57,7 +57,7 @@ export default defineComponent({
           }
         }
         result.selected = props.node === editor.state.selected;
-        result.hovered = props.node === editor.state.hovered;
+        result.highlighted = props.node === editor.state.highlighted;
         return result;
       })
     };
@@ -66,7 +66,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.hovered {
+.highlighted {
   outline: 2px yellow dashed;
 }
 .selected {

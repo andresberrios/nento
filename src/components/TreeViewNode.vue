@@ -2,14 +2,14 @@
   <div>
     <div
       @click.self="editor.selectNode(node)"
-      @mouseover.self="editor.hoverNode(node)"
-      @mouseout.self="editor.hoverNode(null)"
+      @mouseover.self="editor.highlightNode(node)"
+      @mouseout.self="editor.highlightNode(null)"
       class="px-2 py-1 cursor-pointer"
       :class="{
         'text-gray-500': isText,
         'font-mono': !isText,
         selected: isSelected,
-        hovered: isHovered,
+        highlighted: isHighlighted,
         focused: isSelected && editor.state.treeViewFocused
       }"
     >
@@ -41,7 +41,7 @@ export default defineComponent({
     return {
       editor,
       isSelected: computed(() => props.node === editor.state.selected),
-      isHovered: computed(() => props.node === editor.state.hovered),
+      isHighlighted: computed(() => props.node === editor.state.highlighted),
       isText: computed(() => props.node.type === "text"),
       label: computed(() => {
         if (props.node.type === "text") {
@@ -64,7 +64,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.hovered {
+.highlighted {
   background: transparentize($color: yellow, $amount: 0.95);
 }
 .selected {
