@@ -5,6 +5,7 @@ export function setupKeyDownHandlers(editor: Editor) {
     if (event.metaKey && event.shiftKey && !event.ctrlKey && !event.altKey) {
       if (
         editor.state.selected &&
+        "type" in editor.state.selected &&
         !["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName ?? "")
       ) {
         if (event.key === "ArrowUp") {

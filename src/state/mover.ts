@@ -99,31 +99,32 @@ export function setupMover(
     return node;
   }
 
-  function insertNode(
-    nodeOrType: TemplateNode | "element" | "text",
-    parent: TemplateNode | null = state.selected
-  ) {
-    const node =
-      typeof nodeOrType !== "string" && "type" in nodeOrType
-        ? nodeOrType
-        : generateNewNode(nodeOrType);
-    if (parent?.type === "element") {
-      if (parent.children === undefined) {
-        parent.children = [node];
-      } else {
-        parent.children.unshift(node);
-      }
-    } else if (parent !== null) {
-      const grandParent = util.findNodeParent(parent);
-      if (grandParent) {
-        insertNode(node, grandParent);
-      } else {
-        state.component.template.unshift(node);
-      }
+  function insertNode(node: TemplateNode, position = 0, parent?: TemplateNode) {
+    if (!parent && state.selected && "type" in state.selected) {
+      parent = state.selected;
+    }
+    if (!parent) {
+      state.component.template.splice(position, 0, node);
+    } else if (parent.type === "element") {
+      parent.children = parent.children || [];
+      parent.children.splice(position, 0, node);
     } else {
-      state.component.template.unshift(node);
+      while (parent && parent.type !== "element") {
+        parent = util.findNodeParent(parent);
+      }
+      if (!parent) {
+        state.component.template.splice(position, 0, node);
+      } else {
+        parent.children = parent.children || [];
+        parent.children.splice(position, 0, node);
+      }
     }
     state.selected = node;
+  }
+
+  function insertNewNode(type: "element" | "text") {
+    const node = generateNewNode(type);
+    insertNode(node);
   }
 
   return {
@@ -136,6 +137,6 @@ export function setupMover(
     canMoveOut,
     canMoveIn,
     deleteNode,
-    insertNode
+    insertNewNode
   };
 }

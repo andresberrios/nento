@@ -1,9 +1,9 @@
 <template>
   <div class="mb-2">
-    <n-button @click="insertNode('element')">
+    <n-button @click="insertNewNode('element')">
       + Element
     </n-button>
-    <n-button @click="insertNode('text')">
+    <n-button @click="insertNewNode('text')">
       + Text
     </n-button>
   </div>

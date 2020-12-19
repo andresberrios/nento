@@ -32,8 +32,10 @@ export function setupUtil(state: EditorState) {
   }
 
   const selectedParent = computed(() => {
-    const entry = state.selected && findNodeEntry(state.selected);
-    return entry?.parent;
+    if (state.selected !== null && "type" in state.selected) {
+      const entry = findNodeEntry(state.selected);
+      return entry?.parent;
+    }
   });
 
   function selectNode(node: TemplateNode) {

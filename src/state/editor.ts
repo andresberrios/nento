@@ -1,11 +1,11 @@
 import { inject, InjectionKey, provide, reactive } from "vue";
 import demo from "@/assets/demo";
-import { ComponentDefinition, TemplateNode } from "@/lib/template";
+import { Binding, ComponentDefinition, TemplateNode } from "@/lib/template";
 import { setupMover } from "@/state/mover";
 import { setupUtil } from "@/state/util";
 
 export interface EditorState {
-  selected: TemplateNode | null;
+  selected: TemplateNode | Binding | null;
   highlighted: TemplateNode | null;
   treeViewFocused: boolean;
   component: ComponentDefinition;
