@@ -1,6 +1,13 @@
 <template>
-  <div v-for="binding in state.component.bindings" :key="binding.id">
-    {{ binding.id }} - {{ binding.spec }}
+  <div>
+    <n-button @click="createNewBinding()">
+      + Element
+    </n-button>
+  </div>
+  <div class="mt-2">
+    <div v-for="binding in bindings" :key="binding.id">
+      {{ binding.id }} - {{ binding.spec }}
+    </div>
   </div>
 </template>
 
@@ -11,7 +18,13 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "Bindings",
   setup() {
-    return injectEditor();
+    const editor = injectEditor();
+    return {
+      bindings: editor.state.component.bindings,
+      createNewBinding() {
+        editor.bindingManager.createBinding();
+      }
+    };
   }
 });
 </script>

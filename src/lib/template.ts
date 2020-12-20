@@ -1,6 +1,6 @@
 export interface Binding {
   id: string;
-  spec: string;
+  spec?: string;
 }
 
 export interface BindingRef {

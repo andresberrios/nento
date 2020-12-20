@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-2">
+  <div>
     <n-button @click="insertNewNode('element')">
       + Element
     </n-button>
@@ -9,7 +9,7 @@
   </div>
   <div
     tabindex="0"
-    class="focus:outline-none"
+    class="mt-2 focus:outline-none"
     @focus="state.treeViewFocused = true"
     @blur="state.treeViewFocused = false"
   >

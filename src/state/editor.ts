@@ -1,8 +1,9 @@
 import { inject, InjectionKey, provide, reactive } from "vue";
 import demo from "@/assets/demo";
 import { Binding, ComponentDefinition, TemplateNode } from "@/lib/template";
-import { setupMover } from "@/state/mover";
 import { setupUtil } from "@/state/util";
+import { setupMover as setupNodeManager } from "@/state/mover";
+import { setupBindingManager } from "@/state/bindingManager";
 
 export interface EditorState {
   selected: TemplateNode | Binding | null;
@@ -20,12 +21,15 @@ export const setupEditor = () => {
   });
 
   const util = setupUtil(state);
-  const mover = setupMover(state, util);
+  const nodeManager = setupNodeManager(state, util);
+  const bindingManager = setupBindingManager(state);
 
   return {
     state,
+    // TODO Namespace these instead of spreading them:
     ...util,
-    ...mover,
+    ...nodeManager,
+    bindingManager,
     save() {
       window.localStorage.setItem("component", JSON.stringify(state.component));
     },
