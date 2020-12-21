@@ -2,17 +2,17 @@
   <span
     v-if="node.type === 'text'"
     :class="classes"
-    @click.self="editor.selectNode(node)"
-    @mouseover.self="editor.highlightNode(node)"
-    @mouseout.self="editor.highlightNode(null)"
+    @click.self="selectNode(node)"
+    @mouseover.self="highlightNode(node)"
+    @mouseout.self="highlightNode(null)"
     >{{ node.content }}</span
   >
   <span
     v-else-if="node.type === 'binding'"
     :class="classes"
-    @click.self="editor.selectNode(node)"
-    @mouseover.self="editor.highlightNode(node)"
-    @mouseout.self="editor.highlightNode(null)"
+    @click.self="selectNode(node)"
+    @mouseover.self="highlightNode(node)"
+    @mouseout.self="highlightNode(null)"
     >&#123;&#123; Binding: {{ node.bindingId }} &#125;&#125;</span
   >
   <component
@@ -20,9 +20,9 @@
     :is="node.tag"
     v-bind="node.attrs"
     :class="classes"
-    @click.self="editor.selectNode(node)"
-    @mouseover.self="editor.highlightNode(node)"
-    @mouseout.self="editor.highlightNode(null)"
+    @click.self="selectNode(node)"
+    @mouseover.self="highlightNode(node)"
+    @mouseout.self="highlightNode(null)"
   >
     <TemplateNode
       v-for="(child, index) in node.children"
@@ -45,7 +45,6 @@ export default defineComponent({
   setup(props) {
     const editor = injectEditor();
     return {
-      editor,
       classes: computed(() => {
         const result: { [c: string]: boolean } = {};
         if ("classes" in props.node && props.node.classes !== undefined) {
@@ -59,7 +58,9 @@ export default defineComponent({
         result.selected = props.node === editor.state.selected;
         result.highlighted = props.node === editor.state.highlighted;
         return result;
-      })
+      }),
+      selectNode: editor.util.selectNode,
+      highlightNode: editor.util.highlightNode
     };
   }
 });

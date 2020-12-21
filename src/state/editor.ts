@@ -26,9 +26,8 @@ export const setupEditor = () => {
 
   return {
     state,
-    // TODO Namespace these instead of spreading them:
-    ...util,
-    ...nodeManager,
+    util,
+    nodeManager,
     bindingManager,
     save() {
       window.localStorage.setItem("component", JSON.stringify(state.component));

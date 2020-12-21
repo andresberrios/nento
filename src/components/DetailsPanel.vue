@@ -15,37 +15,28 @@
       <div class="mt-3">
         <span class="text-gray-400">Parent:</span>
         <TreeViewNode
-          v-if="editor.selectedParent.value"
-          :node="editor.selectedParent.value"
+          v-if="selectedParent"
+          :node="selectedParent"
           :show-children="false"
-          @click="editor.state.highlighted = editor.selectedParent.value"
+          @click="highlightNode(selectedParent)"
         />
         <pre v-else class="text-gray-500 py-1 ml-2">None</pre>
       </div>
       <div class="mt-3">
-        <n-button @click="editor.deleteNode(selected)">Delete</n-button>
-        <n-button
-          :disabled="!editor.canMoveUp(selected)"
-          @click="editor.moveUp(selected)"
-        >
+        <n-button @click="deleteNode(selected)">Delete</n-button>
+        <n-button :disabled="!canMoveUp(selected)" @click="moveUp(selected)">
           Up
         </n-button>
         <n-button
-          :disabled="!editor.canMoveDown(selected)"
-          @click="editor.moveDown(selected)"
+          :disabled="!canMoveDown(selected)"
+          @click="moveDown(selected)"
         >
           Down
         </n-button>
-        <n-button
-          :disabled="!editor.canMoveIn(selected)"
-          @click="editor.moveIn(selected)"
-        >
+        <n-button :disabled="!canMoveIn(selected)" @click="moveIn(selected)">
           In
         </n-button>
-        <n-button
-          :disabled="!editor.canMoveOut(selected)"
-          @click="editor.moveOut(selected)"
-        >
+        <n-button :disabled="!canMoveOut(selected)" @click="moveOut(selected)">
           Out
         </n-button>
       </div>
@@ -86,9 +77,28 @@ export default defineComponent({
   components: { TreeViewNode, NInputSave },
   setup() {
     const editor = injectEditor();
+    const {
+      moveUp,
+      moveDown,
+      moveIn,
+      moveOut,
+      canMoveUp,
+      canMoveDown,
+      canMoveIn,
+      canMoveOut
+    } = editor.nodeManager;
     return {
-      editor,
-      selected: computed(() => editor.state.selected)
+      moveUp,
+      moveDown,
+      moveIn,
+      moveOut,
+      canMoveUp,
+      canMoveDown,
+      canMoveIn,
+      canMoveOut,
+      selected: computed(() => editor.state.selected),
+      selectedParent: editor.util.selectedParent,
+      highlightNode: editor.util.highlightNode
     };
   }
 });

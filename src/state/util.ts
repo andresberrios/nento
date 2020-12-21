@@ -64,10 +64,6 @@ export function setupUtil(state: EditorState) {
     state.highlighted = node;
   }
 
-  function findBinding(id: string) {
-    return state.component.bindings.find(b => b.id === id);
-  }
-
   return {
     nodes,
     findNodeEntry,
@@ -77,7 +73,6 @@ export function setupUtil(state: EditorState) {
     selectNode,
     selectPreviousNode,
     selectNextNode,
-    highlightNode,
-    findBinding
+    highlightNode
   };
 }

@@ -18,7 +18,12 @@ export function setupBindingManager(state: EditorState) {
     state.component.bindings.unshift({ id, spec: "New binding" });
   }
 
+  function findBinding(id: string) {
+    return state.component.bindings.find(b => b.id === id);
+  }
+
   return {
-    createBinding
+    createBinding,
+    findBinding
   };
 }

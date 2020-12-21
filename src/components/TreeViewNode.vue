@@ -1,16 +1,16 @@
 <template>
   <div>
     <div
-      @click.self="editor.selectNode(node)"
-      @mouseover.self="editor.highlightNode(node)"
-      @mouseout.self="editor.highlightNode(null)"
+      @click.self="selectNode(node)"
+      @mouseover.self="highlightNode(node)"
+      @mouseout.self="highlightNode(null)"
       class="px-2 py-1 cursor-pointer"
       :class="{
         'text-gray-500': isText,
         'font-mono': !isText,
         selected: isSelected,
         highlighted: isHighlighted,
-        focused: isSelected && editor.state.treeViewFocused
+        focused: isSelected && treeViewFocused
       }"
     >
       {{ label }}
@@ -39,9 +39,9 @@ export default defineComponent({
   setup(props) {
     const editor = injectEditor();
     return {
-      editor,
       isSelected: computed(() => props.node === editor.state.selected),
       isHighlighted: computed(() => props.node === editor.state.highlighted),
+      treeViewFocused: computed(() => editor.state.treeViewFocused),
       isText: computed(() => props.node.type === "text"),
       label: computed(() => {
         if (props.node.type === "text") {
@@ -57,7 +57,9 @@ export default defineComponent({
         } else {
           return props.node.tag;
         }
-      })
+      }),
+      selectNode: editor.util.selectNode,
+      highlightNode: editor.util.highlightNode
     };
   }
 });
